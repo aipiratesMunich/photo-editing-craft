@@ -20,7 +20,7 @@ the other half: knowing which edits to make, in what order, and checking the res
 Copy or symlink the folder into your agent's skill directory:
 
 ```sh
-git clone https://github.com/<owner>/photo-editing-craft ~/.claude/skills/photo-editing-craft
+git clone https://github.com/aipiratesMunich/photo-editing-craft ~/.claude/skills/photo-editing-craft
 ```
 
 Works with agents that read `SKILL.md` skills and have a local shell (Claude Code and similar). The craft guides are plain Markdown and useful without the scripts.
