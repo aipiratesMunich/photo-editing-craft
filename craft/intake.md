@@ -19,7 +19,7 @@ Ask these in one message, not one at a time. Write the answers into the job note
 | 5 | Deliverable formats and file size limits? | JPEG vs PNG vs WebP, PDF, TIFF | JPEG for photos, PNG for flat graphics |
 | 6 | Layered master needed? Which format? | Client revisions, handover to Photoshop users | `.pcraft` plus `.psd` |
 | 7 | Brand constraints? (fonts, colors as hex/CMYK/Pantone, logo clear space) | Wrong brand blue is a reject | Ask; never guess brand values |
-| 8 | Rights and releases for every source? | Licence scope, model and property releases | Stop until confirmed |
+| 8 | Rights and releases for every source? | License scope, model and property releases | Stop until confirmed |
 
 ## Source check
 
@@ -28,12 +28,12 @@ Inspect every source before planning edits.
 - Pixel size vs target. Rule of thumb: upscaling beyond 150 % shows; beyond 200 % is a reshoot or a different image. PhotoCraft has no ML upscaler.
 - Embedded profile. A missing or odd profile (wide gamut camera export, CMYK stock) changes how numbers read. PhotoCraft: `edit.profileInfo`, `edit.assignProfile` only when the profile is missing or wrong, never to "fix" color.
 - Bit depth. Heavy tone work on 8-bit skies bands. PhotoCraft: `image.mode.bits16` before big curves, back to `image.mode.bits8` at export.
-- Noise, compression artefacts, motion blur. These cap how far you can push contrast and sharpening.
+- Noise, compression artifacts, motion blur. These cap how far you can push contrast and sharpening.
 - Metadata: author, copyright, camera. PhotoCraft: `file.fileInfo` with no keys reads it.
 
 ## Rights and ethics
 
-- Stock: check licence tier (editorial vs commercial). Editorial-only images cannot sell a product.
+- Stock: check license tier (editorial vs commercial). Editorial-only images cannot sell a product.
 - People: commercial use needs a model release. Minors need guardian consent.
 - Logos, artworks, buildings in frame: property release or crop them out.
 - Documentary or news image: only global tone and color, crop, dust removal. See craft/retouching.md.
@@ -76,5 +76,5 @@ mm to px: `px = mm / 25.4 * ppi`. 300 ppi gives 11.81 px per mm.
 - Brief written down: medium, size, ppi, color space, bleed, formats, master format, brand values, rights status.
 - `scripts/verify.py master.pcraft --expect '{"width":W,"height":H,"resolution":PPI}'` matches the trim plus bleed math.
 - Source upscale factor stated; anything over 150 % flagged to the human.
-- Every source image has a known licence and, where people appear, a release.
+- Every source image has a known license and, where people appear, a release.
 - Every assumption made without an answer is listed in the hand-off message.

@@ -31,5 +31,5 @@
     "resolution": 300.0
   },
   "photoshop": "Image > Image Size (Resample off, 300 ppi), View > Proof Colors, Image > Mode > CMYK Color or Edit > Convert to Profile",
-  "notes": "Soft-proof and fix out-of-gamut colors before converting. Ask the printer for their profile; coated-cmyk is only a generic default. Keep the RGB master."
+  "notes": "Run on a copy and keep the RGB master: do not pass --master, or save the RGB master first. Soft-proof and fix out-of-gamut colors before converting. Ask the printer for their profile; coated-cmyk is only a generic default."
 }

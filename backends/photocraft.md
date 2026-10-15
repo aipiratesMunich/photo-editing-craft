@@ -31,7 +31,7 @@ Never guess a parameter. Each command documents its own:
 
 ```sh
 photocraft-cli commands --filter curves            # ids, menus, shortcuts
-grep -P '^layer\.newAdjustmentLayer\.curves\t' backends/photocraft-commands.tsv
+awk -F'\t' '$1=="layer.newAdjustmentLayer.curves"' backends/photocraft-commands.tsv
 ```
 
 In MCP: `command_list {"filter": "curves"}`; add `"enabled_only": true` to see what can run now.
@@ -75,7 +75,7 @@ upgrading PhotoCraft: `scripts/dump_commands.py`.
   with `tiffLayers`; `.png`, `.jpg`, `.webp` are flattened exports.
 - PSD exchange with Photoshop works for common files but is not yet fully reliable in both
   directions. When a client opens the file in Photoshop, test that before delivery.
-- PDF output is raster only (no live text or vectors, single page).
+- PDF output is raster only (no live text or vectors); one page per artboard via `file.export.artboardsToPdf`.
 
 ## Checking results
 

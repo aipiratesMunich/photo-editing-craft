@@ -51,5 +51,5 @@
     ]
   },
   "photoshop": "Type tool, set layer opacity to about 50 %; for many files record an Action and run File > Automate > Batch",
-  "notes": "For batches use photocraft-cli batch with this recipe's steps; refs need run_recipe.py, so loop over files with it instead."
+  "notes": "For many files, loop run_recipe.py over them; photocraft-cli batch cannot resolve $refs."
 }

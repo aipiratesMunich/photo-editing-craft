@@ -1,5 +1,17 @@
 # Output for screens and the web
 
+## Contents
+- Decide fast
+- Resampling
+- Output sharpening by medium
+- sRGB conversion and embedding
+- Format choice
+- File size targets
+- Metadata stripping
+- 2x assets
+- Batch processing
+- Check before done
+
 ## Decide fast
 - Output from the master, on a copy: resize, then sharpen once, then convert to sRGB, then export.
 - Photos: JPEG or WebP. Flat graphics, UI, text-heavy images, transparency: PNG or lossless WebP.
@@ -12,7 +24,7 @@
 |---|---|---|
 | Bicubic Sharper | downsizing photos (may need less output sharpening) | `bicubicSharper` |
 | Bicubic Smoother | upsizing, modest factors | `bicubicSmoother` |
-| Lanczos | downsizing with fine detail, little ringing at moderate factors | `lanczos` |
+| Lanczos | downsizing with fine detail; sharpest, watch for halos at edges | `lanczos` |
 | Preserve Details | upsizing with edge preservation (classical, not ML) | `preserveDetails` |
 | Nearest neighbor | pixel art, screenshots at integer factors, hard-edged graphics | `nearest` |
 | None | change ppi only, pixel count unchanged | `none` |
@@ -77,7 +89,7 @@ Over budget: lower quality in small steps (5 points), check flat areas and skin 
 - Remove GPS, camera serials and editing history from public images unless the client wants them.
 - Keep copyright and creator fields when the brief asks.
 - PhotoCraft: `file.export.saveForWebLegacy` with `"metadata":"none"` or `"copyright"`; `file.export.exportPreferences` with `metadata`. Set fields beforehand with `file.fileInfo`.
-- Generated assets: also strip C2PA, XMP and EXIF if the brief requires it, with an external tool (`exiftool -all=`). Check whether the client must disclose AI use before stripping provenance.
+- AI-generated assets: keep C2PA provenance and any AI disclosure by default; disclosure rules (for example the EU AI Act, Art. 50) may require it. Strip only camera, GPS and serial-number fields (`exiftool -gps:all= -serialnumber= -make= -model=`).
 
 ## 2x assets
 

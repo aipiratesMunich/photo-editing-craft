@@ -19,7 +19,7 @@
 
 A low-key or high-key image is not wrong because the histogram sits to one side. Decide from the subject, not from the graph.
 
-PhotoCraft: no histogram panel command; measure with `scripts/verify.py` (`mean_luma`, `luma_std`, `clipped_shadows_pct`, `clipped_highlights_pct`) and `image.analysis.info` or `document.pixel` at points.
+PhotoCraft: no histogram panel command; measure with `scripts/verify.py` (`mean_luma`, `luma_std`, `clipped_shadows_pct`, `clipped_highlights_pct`) and `document.pixel` or `document.sampleColor` at points.
 
 ## Neutral references
 
@@ -49,7 +49,7 @@ PhotoCraft: no histogram panel command; measure with `scripts/verify.py` (`mean_
 2. Curves gray eyedropper on the neutral. recipe: recipes/fix-color-cast.json. PhotoCraft: `layer.newAdjustmentLayer.curves` with `"eyedropper":{"point":"gray","at":[x,y]}`.
 3. No neutral: per-channel curves by eye, or Color Balance in midtones. PhotoCraft: `layer.newAdjustmentLayer.colorBalance`.
 4. Mixed light (window plus tungsten): correct for the main subject, then mask a second correction for the other area.
-5. Keep intentional warmth (sunset, candlelight). Neutralize, then add back 20 to 40 % warmth by lowering the correction layer opacity.
+5. Keep intentional warmth (sunset, candlelight). Neutralize, then set the correction layer to 60 to 80 % opacity to keep some warmth.
 
 Photo Filter suits a global warm or cool shift. PhotoCraft: `layer.newAdjustmentLayer.photoFilter`.
 
@@ -72,7 +72,7 @@ Photo Filter suits a global warm or cool shift. PhotoCraft: `layer.newAdjustment
 - Curves layer brightened (dodge) and one darkened (burn), both with black masks; paint white at low flow (2 to 10 %). PhotoCraft: two `layer.newAdjustmentLayer.curves`, then `layer.layerMask.hideAll` and paint the mask with `paint.stroke` and `"target":"mask"`.
 - Alternative: 50 % gray layer in Soft Light, `paint.dodge` and `paint.burn` on it (`range`, `exposure`, `protectTones`). PhotoCraft: `layer.new.layer`, `edit.fill` with `"contents":"gray"`, `layer.setProps` `"blend":"Soft Light"`.
 - Guide the eye: brighten the subject, darken edges and distractions. recipe: recipes/vignette.json
-- Check by toggling the layers: the change should be visible only when switched off.
+- Check by toggling the layers: the change should be subtle enough that you notice it mainly when toggling.
 
 ## Black and white
 

@@ -4,7 +4,7 @@
 - Get the printer's spec sheet first: profile (or "send RGB"), total ink limit, bleed, file format, PDF standard.
 - Keep the master in RGB. Make the CMYK version as a copy, after soft proofing with the printer's profile.
 - 300 ppi at final size for offset and close viewing; less is fine for posters seen from a distance.
-- PhotoCraft writes raster-only, single-page PDF. Anything needing live text, vectors or PDF/X goes through a layout app.
+- PhotoCraft writes raster-only PDF (one page per artboard). Anything needing live text, vectors or PDF/X goes through a layout app.
 
 ## Resolution (ppi)
 
@@ -65,7 +65,7 @@ Choose by proofing both relative and perceptual and keeping the one that looks c
 ## Total ink limit
 
 - Typical limits: coated offset 300 to 330 %, uncoated 260 to 300 %, newsprint 220 to 260 %. The printer's profile sets this when you convert with it.
-- Measure the darkest areas after converting: sum C + M + Y + K. PhotoCraft: `image.analysis.info` or `document.sampleColor` at points; color samplers `view.colorSamplers.add` in a CMYK document.
+- Measure the darkest areas after converting: sum C + M + Y + K. PhotoCraft: `document.sampleColor` at points; color samplers `view.colorSamplers.add` in a CMYK document.
 - Over the limit: reconvert with the correct profile; do not fix numbers by hand except in small areas.
 
 ## Bleed and safe zone
@@ -82,7 +82,7 @@ Choose by proofing both relative and perceptual and keeping the one that looks c
 - PDF/X-3: allows color-managed RGB with an output intent.
 - PDF/X-4: keeps live transparency and layers; current default for many printers.
 - All include an output intent (the press profile), fonts embedded, trim and bleed boxes.
-- PhotoCraft cannot write PDF/X. Its PDF is raster-only and single page: no live text, no vectors, no trim box. Route: export a CMYK or RGB TIFF from PhotoCraft (`doc_export` to `.tif`, or `file.saveACopy`), place it in a layout app (InDesign, Affinity Publisher, Scribus), set type there, export PDF/X.
+- PhotoCraft cannot write PDF/X. Its PDF is raster-only (one page per artboard): no live text, no vectors, no trim box. Route: export a CMYK or RGB TIFF from PhotoCraft (`doc_export` to `.tif`, or `file.saveACopy`), place it in a layout app (InDesign, Affinity Publisher, Scribus), set type there, export PDF/X.
 - PhotoCraft TIFF keeps layers only with `tiffLayers`; printers usually want flat TIFF.
 
 ## Check before done

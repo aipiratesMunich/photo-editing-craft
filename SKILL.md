@@ -1,6 +1,6 @@
 ---
 name: photo-editing-craft
-description: Edits photos and graphics with the judgement of an experienced retoucher and designer, in PhotoCraft (open-source, MCP and CLI) or Adobe Photoshop. Covers color and tone correction, retouching, cutouts and masks, compositing, type on images, web and social export, and print preparation, with tested recipes and a verify script that measures the result. Use when the user asks to fix, retouch, cut out, combine, label, resize, export or print-prepare an image, mentions Photoshop or PhotoCraft, or asks how to do an image-editing task well.
+description: Edits photos and graphics with the judgment of an experienced retoucher and designer, in PhotoCraft (open-source, MCP and CLI) or Adobe Photoshop. Covers color and tone correction, retouching, cutouts and masks, compositing, type on images, web and social export, and print preparation, with tested recipes and a verify script that measures the result. Use when the user asks to fix, retouch, cut out, combine, label, resize, export or print-prepare an image, mentions Photoshop or PhotoCraft, or asks how to do an image-editing task well.
 ---
 
 # Photo editing craft
@@ -24,16 +24,18 @@ Copy this and tick it off:
 
 ## Order of operations
 
-1. Raw development and white balance
-2. Global tone (levels, curves), then global color (cast, vibrance)
-3. Local corrections (dodge, burn, masked adjustments)
-4. Retouching on empty layers
-5. Cutouts, compositing, type and graphics
-6. Crop and resize to the target
-7. Output sharpening, color conversion, export
+1. Inspect: size, mode, profile, histogram, defects
+2. Raw and lens: exposure, white balance, lens profile
+3. Geometry: straighten, perspective, loose crop
+4. Cleanup: dust, spots, distractions on empty layers
+5. Global tone (levels, curves), then global color (cast, vibrance)
+6. Local work: dodge, burn, masked adjustments
+7. Cutouts, compositing, type and graphics
+8. Look: grade, vignette, grain
+9. Output copies: final crop and resize, sharpen for the medium, convert color, export
 
-Tone before color, because contrast moves saturation. Sharpen last, because the right amount
-depends on final pixel size. Details and exceptions: craft/workflow-order.md.
+Clean up before tone moves make spots stand out. Tone before color, because contrast moves
+saturation. Sharpen last, because the right amount depends on final pixel size. Details and exceptions: craft/workflow-order.md.
 
 ## Rules that always apply
 
@@ -64,7 +66,7 @@ depends on final pixel size. Details and exceptions: craft/workflow-order.md.
 
 - **PhotoCraft MCP tools available** (`photocraft:command_run` and friends): use them. Read
   backends/photocraft.md first. Look up every command with `command_list {"filter": ...}` or
-  `grep -P '^<id>\t' backends/photocraft-commands.tsv` before calling it.
+  `awk -F'\t' '$1=="<id>"' backends/photocraft-commands.tsv` before calling it.
 - **photocraft-cli available, no MCP**: use `scripts/run_recipe.py` for recipes and
   `scripts/verify.py` for checks.
 - **Adobe Photoshop**: give menu paths and shortcuts from backends/photoshop.md, or drive it

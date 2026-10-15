@@ -3,8 +3,8 @@
 An agent skill that edits images the way an experienced retoucher and designer would, in
 [PhotoCraft](https://github.com/storytold/photocraft) (open source) or Adobe Photoshop.
 
-Most Photoshop skills and MCP servers give an agent remote control: hundreds of commands and no
-judgement. This skill adds the judgement and the proof:
+Photoshop MCP servers and skills already let an agent run editing commands. This skill covers
+the other half: knowing which edits to make, in what order, and checking the result.
 
 - **Craft**: what to decide before touching pixels, the order of operations, which tool fits
   which edge, defect or output, with rules of thumb an agent can apply.
@@ -23,7 +23,7 @@ Copy or symlink the folder into your agent's skill directory:
 git clone https://github.com/<owner>/photo-editing-craft ~/.claude/skills/photo-editing-craft
 ```
 
-Works with any agent that reads `SKILL.md` skills (Claude Code, Claude apps, other SKILL.md hosts).
+Works with agents that read `SKILL.md` skills and have a local shell (Claude Code and similar). The craft guides are plain Markdown and useful without the scripts.
 
 For PhotoCraft, build it (`cargo build --release` in a checkout of storytold/photocraft) and either
 put `photocraft-cli` on `PATH` or set `PHOTOCRAFT_CLI`. For its MCP server:
@@ -33,11 +33,13 @@ claude mcp add photocraft -- photocraft-cli mcp --automation-read-root ~/Picture
 ```
 
 For Adobe Photoshop, the skill gives menu paths and shortcuts; for automation pair it with a
-Photoshop MCP such as [adb-mcp](https://github.com/mikechambers/adb-mcp).
+Photoshop MCP such as [adb-mcp](https://github.com/mikechambers/adb-mcp). The scripts
+(`run_recipe.py`, `verify.py`) use photocraft-cli in either case, so Photoshop-only users who want
+measured checks also need a PhotoCraft build.
 
 ## Use
 
-Ask for the result, the skill does the rest:
+Ask for the result in plain words, for example:
 
 > Remove the color cast from product.jpg, cut the product out, put it on #1e3c5a and export a 1080x1350 post.
 

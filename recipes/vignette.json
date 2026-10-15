@@ -75,5 +75,5 @@
     ]
   },
   "photoshop": "Elliptical Marquee, Select > Inverse, Select > Modify > Feather, Layer > New Fill Layer > Solid Color black, blend Multiply, lower opacity",
-  "notes": "Subtle wins: 25 to 45 % opacity. The edge should not read as a dark ring."
+  "notes": "Subtle wins: strength 0.25 to 0.45 (layer opacity). The edge should not read as a dark ring. The feather sits on the selection here so the fill layer's mask is born soft; adjust it later with layer.layerMask.edit {\"feather\": px}."
 }

@@ -1,9 +1,18 @@
 # Working with Adobe Photoshop as an agent
 
+Menu names and shortcuts as of Photoshop 2026 (version 27); check Edit > Keyboard Shortcuts if one differs.
+
+## Contents
+- Decide fast
+- Mapping table
+- Automation routes
+- Moving files between Photoshop and PhotoCraft
+- Check before done
+
 ## Decide fast
 - The craft files apply unchanged; only the commands differ. Use the mapping table below to translate.
-- For live control from an agent, use an MCP bridge over UXP (adb-mcp). For repeatable server-side jobs, use UXP scripts or recorded Actions.
-- Generative features (Generative Fill, Generative Expand, Neural Filters, Sky Replacement) have no PhotoCraft equivalent. Say which tool produced a result when it matters for disclosure.
+- For live control from an agent, use an MCP bridge over UXP (adb-mcp). For unattended batch jobs on a workstation, use UXP scripts or recorded Actions.
+- Generative features (Generative Fill, Generative Expand, Neural Filters, Sky Replacement; names as of Photoshop 2026) have no PhotoCraft equivalent. Say which tool produced a result when it matters for disclosure.
 - Hand over PSD files only after opening them in the target app and comparing layers, masks and blend modes.
 
 ## Mapping table

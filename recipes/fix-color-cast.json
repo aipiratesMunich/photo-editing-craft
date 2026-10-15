@@ -1,14 +1,55 @@
 {
   "name": "fix-color-cast",
-  "summary": "Neutralise a color cast by setting a gray point on something that should be neutral.",
+  "summary": "Neutralize a color cast by setting a gray point on something that should be neutral.",
   "when": "The image has a tint (warm tungsten, green fluorescent, blue shade) and contains a neutral reference: gray card, white wall, concrete, paper.",
-  "vars": {"neutral": [80, 80]},
+  "vars": {
+    "neutral": [
+      80,
+      80
+    ]
+  },
   "steps": [
-    {"id": "layer.newAdjustmentLayer.curves", "params": {"eyedropper": {"point": "gray", "at": "${neutral}"}}, "as": "neutral_curve"},
-    {"id": "layer.setProps", "params": {"layer": "$neutral_curve", "name": "Neutralize cast"}}
+    {
+      "id": "layer.newAdjustmentLayer.curves",
+      "params": {
+        "eyedropper": {
+          "point": "gray",
+          "at": "${neutral}"
+        }
+      },
+      "as": "neutral_curve"
+    },
+    {
+      "id": "layer.setProps",
+      "params": {
+        "layer": "$neutral_curve",
+        "name": "Neutralize cast"
+      }
+    }
   ],
-  "test": {"in": "cast.png", "vars": {"neutral": [80, 80]}},
-  "expect": {"layers_min": 2, "regions": [{"region": [45, 45, 70, 70], "max_channel_spread": 6}]},
+  "test": {
+    "in": "cast.png",
+    "vars": {
+      "neutral": [
+        80,
+        80
+      ]
+    }
+  },
+  "expect": {
+    "layers_min": 2,
+    "regions": [
+      {
+        "region": [
+          45,
+          45,
+          70,
+          70
+        ],
+        "max_channel_spread": 6
+      }
+    ]
+  },
   "photoshop": "Layer > New Adjustment Layer > Curves, then the Set Gray Point eyedropper on the neutral area",
   "notes": "Pick a mid-tone neutral, not a highlight. If no neutral exists, balance by eye with the per-channel curves instead."
 }
