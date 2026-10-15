@@ -7,6 +7,7 @@ import os
 import shutil
 import struct
 import subprocess
+import tempfile
 import zlib
 from pathlib import Path
 
@@ -20,8 +21,7 @@ class PhotoCraftError(RuntimeError):
 def find_cli(explicit=None):
     """Locate photocraft-cli: --cli, $PHOTOCRAFT_CLI, PATH, or a sibling checkout."""
     candidates = [explicit, os.environ.get("PHOTOCRAFT_CLI"), shutil.which("photocraft-cli")]
-    candidates += [str(p / "target/release/photocraft-cli")
-                   for p in (HERE.parent.parent / "photocraft", Path.home() / "GIT/photocraft")]
+    candidates.append(str(HERE.parent.parent / "photocraft/target/release/photocraft-cli"))
     for c in candidates:
         if c and Path(c).is_file() and os.access(c, os.X_OK):
             return c
@@ -38,8 +38,9 @@ class Session:
         args = [find_cli(cli), "serve"]
         if root:
             args += ["--automation-read-root", str(root), "--automation-write-root", str(root)]
+        self._log = tempfile.TemporaryFile(mode="w+")  # a file, so a chatty stderr cannot block
         self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE, text=True, bufsize=1)
+                                     stderr=self._log, text=True, bufsize=1)
         self._id = 0
 
     def call(self, method, params=None):
@@ -49,7 +50,8 @@ class Session:
         self.proc.stdin.flush()
         reply = self.proc.stdout.readline()
         if not reply:
-            raise PhotoCraftError("photocraft-cli serve exited: " + self.proc.stderr.read()[-500:])
+            self._log.seek(0)
+            raise PhotoCraftError("photocraft-cli serve exited: " + self._log.read()[-500:])
         msg = json.loads(reply)
         if not msg.get("ok"):
             raise PhotoCraftError(msg.get("error", "unknown error"))
@@ -61,7 +63,11 @@ class Session:
     def close(self):
         if self.proc.poll() is None:
             self.proc.stdin.close()
-            self.proc.wait(timeout=10)
+            try:
+                self.proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                self.proc.kill()
+        self._log.close()
 
     def __enter__(self):
         return self
@@ -73,7 +79,11 @@ class Session:
 def common_root(*paths):
     """Smallest directory containing every given file or directory path."""
     dirs = [str(Path(p).resolve() if Path(p).is_dir() else Path(p).resolve().parent) for p in paths]
-    return Path(os.path.commonpath(dirs))
+    root = Path(os.path.commonpath(dirs))
+    if len(root.parts) <= 1:  # never hand PhotoCraft the whole filesystem
+        raise PhotoCraftError(f"files are spread too widely (common folder {root}); "
+                              "keep inputs and outputs under one project folder")
+    return root
 
 
 def walk_layers(layers, depth=0):

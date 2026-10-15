@@ -48,8 +48,11 @@ def stats(px):
     }
 
 
-def crop(width, px, region, scale):
+def crop(width, height, px, region, scale):
     x, y, w, h = (int(round(v * scale)) for v in region)
+    if x < 0 or y < 0 or x + max(w, 1) > width or y + max(h, 1) > height:
+        raise PhotoCraftError(f"region {list(region)} lies outside the image "
+                              f"({round(width / scale)} x {round(height / scale)})")
     w, h = max(w, 1), max(h, 1)
     return [px[(y + j) * width + x + i] for j in range(h) for i in range(w)]
 
@@ -75,7 +78,7 @@ def analyze(path, regions=(), preview=None, cli=None):
         "file": str(path), "width": doc["width"], "height": doc["height"],
         "mode": doc["mode"], "depth": doc["depth"], "resolution": doc["resolution"],
         "layers": layers, "image": stats(px),
-        "regions": [{"region": list(r), **stats(crop(w, px, r, scale))} for r in regions],
+        "regions": [{"region": list(r), **stats(crop(w, h, px, r, scale))} for r in regions],
     }
     return facts
 

@@ -6,6 +6,7 @@
 Outputs land in tests/out/ (result, layered .pcraft master, preview PNG, JSON report).
 Exit code 1 if any recipe fails to run or misses its expectations.
 """
+import argparse
 import json
 import subprocess
 import sys
@@ -42,7 +43,13 @@ def test(name):
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    names = sys.argv[1:] or sorted(p.stem for p in (ROOT / "recipes").glob("*.json"))
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    ap.add_argument("recipes", nargs="*", help="recipe names (default: all)")
+    known = sorted(p.stem for p in (ROOT / "recipes").glob("*.json"))
+    names = ap.parse_args().recipes or known
+    unknown = [n for n in names if n not in known]
+    if unknown:
+        sys.exit(f"no such recipe: {', '.join(unknown)} (known: {', '.join(known)})")
     failed = 0
     print(f"{'RECIPE':<22} RESULT")
     for name in names:
