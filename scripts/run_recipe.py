@@ -14,6 +14,7 @@ may reference earlier results instead of hardcoded layer ids:
     "=expr"         arithmetic on width, height, numbers and vars, e.g. "=width*0.5-200"
 
 "target" selects that layer before the step (filters and pixel tools need an active pixel layer).
+"for_each": "${list}" repeats a step once per list item, with the item available as ${item}.
 Prints a JSON report; exits 1 on the first failing step with the PhotoCraft error and a hint.
 """
 import argparse
@@ -76,7 +77,8 @@ class Resolver:
         if not isinstance(v, str):
             return v
         if v.startswith("="):
-            return evaluate(v[1:], self.names())
+            expr = re.sub(r"\$\{(\w+)\}", lambda m: str(self.vars[m.group(1)]), v[1:])
+            return evaluate(expr, self.names())
         whole = re.fullmatch(r"\$\{(\w+)\}", v)
         if whole:
             return self.vars[whole.group(1)]
@@ -103,8 +105,19 @@ def hint_for(message):
     return next((h for k, h in HINTS.items() if k in message), None)
 
 
+def expand(steps, resolver):
+    """Unroll {"for_each": "${list}", ...}: one step per item, ${item} bound to each value."""
+    for step in steps:
+        if "for_each" not in step:
+            yield step
+            continue
+        for item in resolver.value(step["for_each"]):
+            resolver.vars["item"] = item
+            yield {k: v for k, v in step.items() if k != "for_each"}
+
+
 def run(recipe, session, resolver, report):
-    for i, step in enumerate(recipe["steps"]):
+    for i, step in enumerate(expand(recipe["steps"], resolver)):
         resolver.doc = session.call("doc.inspect")
         resolver.layers["background"] = background_layer(resolver.doc)
         entry = {"step": i, "id": step["id"]}

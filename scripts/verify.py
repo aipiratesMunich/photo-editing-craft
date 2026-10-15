@@ -11,9 +11,11 @@ lists every failed assertion. Assertion keys:
     layer_kinds                                   list of kinds that must exist, e.g. ["Type"]
     has_mask                                      true: at least one layer has a mask
     mean_luma_between, luma_std_min, luma_std_max whole image, 0..255
+    mean_chroma_min                               average max(rgb)-min(rgb), a saturation proxy
     clipped_max                                   % of pixels at pure black or white
     regions: [{"region":[x,y,w,h], "mean_luma_between":[a,b],
-               "max_channel_spread":n, "mean_rgb_near":[[r,g,b], tol], "alpha_max":n}]
+               "max_channel_spread":n, "mean_rgb_near":[[r,g,b], tol],
+               "mean_chroma_min":n, "alpha_max":n}]
 """
 import argparse
 import json
@@ -39,6 +41,7 @@ def stats(px):
         "mean_luma": round(mean, 1),
         "luma_std": round(std, 1),
         "channel_spread": round(max(rgb) - min(rgb), 1),
+        "mean_chroma": round(sum(max(p[:3]) - min(p[:3]) for p in px) / n, 1),
         "clipped_shadows_pct": round(100 * sum(v < 1 for v in lum) / n, 2),
         "clipped_highlights_pct": round(100 * sum(v > 254 for v in lum) / n, 2),
         "mean_alpha": round(sum(p[3] for p in px) / n, 1),
@@ -111,6 +114,9 @@ def check(facts, expect):
     if "luma_std_max" in expect:
         need(img["luma_std"] <= expect["luma_std_max"],
              f"luma std {img['luma_std']} above {expect['luma_std_max']}")
+    if "mean_chroma_min" in expect:
+        need(img["mean_chroma"] >= expect["mean_chroma_min"],
+             f"mean chroma {img['mean_chroma']} below {expect['mean_chroma_min']}")
     if "clipped_max" in expect:
         clipped = img["clipped_shadows_pct"] + img["clipped_highlights_pct"]
         need(clipped <= expect["clipped_max"], f"{clipped}% clipped, max {expect['clipped_max']}%")
@@ -127,6 +133,9 @@ def check(facts, expect):
             target, tol = spec["mean_rgb_near"]
             off = max(abs(a - b) for a, b in zip(got["mean_rgb"], target))
             need(off <= tol, f"{label}: rgb {got['mean_rgb']} not within {tol} of {target}")
+        if "mean_chroma_min" in spec:
+            need(got["mean_chroma"] >= spec["mean_chroma_min"],
+                 f"{label}: mean chroma {got['mean_chroma']} below {spec['mean_chroma_min']}")
         if "alpha_max" in spec:
             need(got["mean_alpha"] <= spec["alpha_max"],
                  f"{label}: mean alpha {got['mean_alpha']} > {spec['alpha_max']}")
