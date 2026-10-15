@@ -1,0 +1,46 @@
+{
+  "name": "social-export-4x5",
+  "summary": "Crop to 4:5 portrait, size to 1080 x 1350, sharpen for screens, convert to sRGB.",
+  "when": "Instagram feed portrait posts. Check the current platform spec before relying on the numbers.",
+  "steps": [
+    {
+      "id": "image.crop",
+      "params": {
+        "x": "=(width-height*0.8)/2",
+        "y": 0,
+        "width": "=height*0.8",
+        "height": "=height",
+        "targetWidth": 1080,
+        "targetHeight": 1350,
+        "resolution": 72,
+        "resample": "bicubic"
+      }
+    },
+    {
+      "id": "filter.sharpen.unsharpMask",
+      "params": {
+        "amount": 60,
+        "radius": 0.8,
+        "threshold": 2
+      },
+      "target": "$background"
+    },
+    {
+      "id": "edit.convertToProfile",
+      "params": {
+        "profile": "srgb",
+        "intent": "relative"
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png",
+    "out_ext": ".jpg"
+  },
+  "expect": {
+    "width": 1080,
+    "height": 1350
+  },
+  "photoshop": "Crop tool (C) with ratio 4:5, Image > Image Size 1080 x 1350, Filter > Sharpen > Unsharp Mask, Edit > Convert to Profile sRGB",
+  "notes": "Upscaling a small source (as in the test) softens it; the sharpen only hides part of that. Prefer a source at least 1080 px wide on the cropped side."
+}

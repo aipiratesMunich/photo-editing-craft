@@ -1,0 +1,55 @@
+{
+  "name": "watermark",
+  "summary": "Add a small semi-transparent text watermark in the bottom-right corner.",
+  "when": "Proofs and previews sent to clients before final delivery.",
+  "vars": {
+    "text": "© Studio",
+    "size": 18
+  },
+  "steps": [
+    {
+      "id": "type.create",
+      "params": {
+        "x": "=width-20",
+        "y": "=height-20",
+        "text": "${text}",
+        "size": "${size}",
+        "color": "#ffffff",
+        "align": "right",
+        "name": "Watermark"
+      },
+      "as": "mark"
+    },
+    {
+      "id": "layer.setProps",
+      "params": {
+        "layer": "$mark",
+        "opacity": 0.5
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png"
+  },
+  "expect": {
+    "layer_kinds": [
+      "Type"
+    ],
+    "regions": [
+      {
+        "region": [
+          470,
+          362,
+          115,
+          25
+        ],
+        "mean_luma_between": [
+          95,
+          200
+        ]
+      }
+    ]
+  },
+  "photoshop": "Type tool, set layer opacity to about 50 %; for many files record an Action and run File > Automate > Batch",
+  "notes": "For batches use photocraft-cli batch with this recipe's steps; refs need run_recipe.py, so loop over files with it instead."
+}

@@ -1,0 +1,79 @@
+{
+  "name": "vignette",
+  "summary": "Darken the edges gently to pull the eye to the center.",
+  "when": "Portraits and product shots with distracting bright edges.",
+  "vars": {
+    "strength": 0.4
+  },
+  "steps": [
+    {
+      "id": "select.rect",
+      "params": {
+        "x": "=width*0.08",
+        "y": "=height*0.08",
+        "width": "=width*0.84",
+        "height": "=height*0.84",
+        "ellipse": true,
+        "feather": "=width*0.12"
+      }
+    },
+    {
+      "id": "select.inverse",
+      "params": {}
+    },
+    {
+      "id": "layer.newFillLayer.solidColor",
+      "params": {
+        "color": "#000000"
+      },
+      "as": "vig"
+    },
+    {
+      "id": "layer.setProps",
+      "params": {
+        "layer": "$vig",
+        "name": "Vignette",
+        "blend": "Multiply",
+        "opacity": "${strength}"
+      }
+    },
+    {
+      "id": "select.deselect",
+      "params": {}
+    }
+  ],
+  "test": {
+    "in": "scene.png"
+  },
+  "expect": {
+    "has_mask": true,
+    "regions": [
+      {
+        "region": [
+          0,
+          0,
+          30,
+          30
+        ],
+        "mean_luma_between": [
+          60,
+          120
+        ]
+      },
+      {
+        "region": [
+          280,
+          180,
+          40,
+          40
+        ],
+        "mean_luma_between": [
+          170,
+          200
+        ]
+      }
+    ]
+  },
+  "photoshop": "Elliptical Marquee, Select > Inverse, Select > Modify > Feather, Layer > New Fill Layer > Solid Color black, blend Multiply, lower opacity",
+  "notes": "Subtle wins: 25 to 45 % opacity. The edge should not read as a dark ring."
+}

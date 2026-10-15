@@ -1,0 +1,44 @@
+{
+  "name": "resize-for-web",
+  "summary": "Downsize for the web, sharpen after resizing, convert to sRGB.",
+  "when": "Website images, blog posts, email.",
+  "vars": {
+    "width": 400
+  },
+  "steps": [
+    {
+      "id": "image.imageSize",
+      "params": {
+        "width": "${width}",
+        "height": "=height*${width}/width",
+        "resample": "bicubicSharper"
+      }
+    },
+    {
+      "id": "filter.sharpen.unsharpMask",
+      "params": {
+        "amount": 50,
+        "radius": 0.5,
+        "threshold": 2
+      },
+      "target": "$background"
+    },
+    {
+      "id": "edit.convertToProfile",
+      "params": {
+        "profile": "srgb",
+        "intent": "relative"
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png",
+    "out_ext": ".jpg"
+  },
+  "expect": {
+    "width": 400,
+    "height": 267
+  },
+  "photoshop": "Image > Image Size (Bicubic Sharper), Filter > Sharpen > Unsharp Mask, Edit > Convert to Profile sRGB, File > Export > Export As",
+  "notes": "Sharpen once, after the final resize. Amount 40 to 80 %, radius 0.3 to 0.8 px for screens."
+}

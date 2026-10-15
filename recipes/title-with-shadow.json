@@ -1,0 +1,60 @@
+{
+  "name": "title-with-shadow",
+  "summary": "Set a headline as live type with a soft shadow for legibility over a photo.",
+  "when": "Posters, thumbnails and covers where text sits on a busy image.",
+  "vars": {
+    "text": "SUMMER",
+    "size": 72
+  },
+  "steps": [
+    {
+      "id": "type.create",
+      "params": {
+        "x": "=width*0.5",
+        "y": "=height*0.25",
+        "text": "${text}",
+        "size": "${size}",
+        "color": "#ffffff",
+        "align": "center",
+        "name": "Headline"
+      },
+      "as": "title"
+    },
+    {
+      "id": "layer.layerStyle.dropShadow",
+      "params": {
+        "layer": "$title",
+        "color": "#000000",
+        "opacity": 55,
+        "distance": 3,
+        "size": 12,
+        "angle": 120
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png"
+  },
+  "expect": {
+    "layer_kinds": [
+      "Type"
+    ],
+    "layers_min": 2,
+    "regions": [
+      {
+        "region": [
+          250,
+          55,
+          100,
+          50
+        ],
+        "mean_luma_between": [
+          170,
+          255
+        ]
+      }
+    ]
+  },
+  "photoshop": "Type tool (T), then Layer > Layer Style > Drop Shadow",
+  "notes": "Keep type live. If the shadow is not enough, put a dark gradient fill layer (scrim) under the text instead of a heavier shadow."
+}

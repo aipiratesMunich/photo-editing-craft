@@ -1,0 +1,122 @@
+{
+  "name": "remove-spots",
+  "summary": "Heal dust spots on an empty retouch layer so the original stays untouched.",
+  "when": "Small isolated blemishes: sensor dust, specks, small skin spots.",
+  "vars": {
+    "spots": [
+      [
+        150,
+        120
+      ],
+      [
+        420,
+        90
+      ],
+      [
+        300,
+        300
+      ],
+      [
+        510,
+        260
+      ],
+      [
+        90,
+        330
+      ]
+    ],
+    "size": 20
+  },
+  "steps": [
+    {
+      "id": "layer.new.layer",
+      "params": {
+        "name": "Retouch"
+      },
+      "as": "retouch"
+    },
+    {
+      "id": "paint.spotHealing",
+      "for_each": "${spots}",
+      "params": {
+        "points": [
+          "${item}"
+        ],
+        "size": "${size}",
+        "type": "contentAware",
+        "sampleAllLayers": true,
+        "layer": "$retouch"
+      }
+    }
+  ],
+  "test": {
+    "in": "spots.png"
+  },
+  "expect": {
+    "layers_min": 2,
+    "regions": [
+      {
+        "region": [
+          145,
+          115,
+          10,
+          10
+        ],
+        "mean_luma_between": [
+          140,
+          210
+        ]
+      },
+      {
+        "region": [
+          415,
+          85,
+          10,
+          10
+        ],
+        "mean_luma_between": [
+          140,
+          210
+        ]
+      },
+      {
+        "region": [
+          295,
+          295,
+          10,
+          10
+        ],
+        "mean_luma_between": [
+          70,
+          140
+        ]
+      },
+      {
+        "region": [
+          505,
+          255,
+          10,
+          10
+        ],
+        "mean_luma_between": [
+          70,
+          140
+        ]
+      },
+      {
+        "region": [
+          85,
+          325,
+          10,
+          10
+        ],
+        "mean_luma_between": [
+          40,
+          120
+        ]
+      }
+    ]
+  },
+  "photoshop": "Spot Healing Brush (J) with Content-Aware and Sample All Layers on a new empty layer",
+  "notes": "Brush about 1.5 to 2 times the spot diameter. One click per spot: a points list in a single step is one connected stroke, so use for_each."
+}

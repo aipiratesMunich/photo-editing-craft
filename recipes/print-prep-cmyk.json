@@ -1,0 +1,35 @@
+{
+  "name": "print-prep-cmyk",
+  "summary": "Set 300 ppi without resampling and convert to CMYK for offset print.",
+  "when": "Final step before handing an image to a printer that asks for CMYK.",
+  "vars": {
+    "profile": "coated-cmyk"
+  },
+  "steps": [
+    {
+      "id": "image.imageSize",
+      "params": {
+        "resolution": 300,
+        "resample": "none"
+      }
+    },
+    {
+      "id": "image.mode.cmyk",
+      "params": {
+        "profile": "${profile}",
+        "intent": "relative",
+        "bpc": true
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png",
+    "out_ext": ".tif"
+  },
+  "expect": {
+    "mode": "Cmyk",
+    "resolution": 300.0
+  },
+  "photoshop": "Image > Image Size (Resample off, 300 ppi), View > Proof Colors, Image > Mode > CMYK Color or Edit > Convert to Profile",
+  "notes": "Soft-proof and fix out-of-gamut colors before converting. Ask the printer for their profile; coated-cmyk is only a generic default. Keep the RGB master."
+}

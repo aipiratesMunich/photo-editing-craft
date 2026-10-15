@@ -1,0 +1,66 @@
+{
+  "name": "replace-background",
+  "summary": "Cut out the subject and put a new solid background behind it.",
+  "when": "Product shots that need a clean brand color or white background.",
+  "vars": {
+    "color": "#1e3c5a"
+  },
+  "steps": [
+    {
+      "id": "layer.new.layerFromBackground",
+      "params": {}
+    },
+    {
+      "id": "select.subject",
+      "params": {}
+    },
+    {
+      "id": "layer.layerMask.revealSelection",
+      "params": {},
+      "as": "subject"
+    },
+    {
+      "id": "select.deselect",
+      "params": {}
+    },
+    {
+      "id": "layer.newFillLayer.solidColor",
+      "params": {
+        "color": "${color}"
+      },
+      "as": "bg"
+    },
+    {
+      "id": "layer.arrange.sendToBack",
+      "params": {
+        "layer": "$bg"
+      }
+    }
+  ],
+  "test": {
+    "in": "subject.png"
+  },
+  "expect": {
+    "has_mask": true,
+    "regions": [
+      {
+        "region": [
+          5,
+          5,
+          40,
+          40
+        ],
+        "mean_rgb_near": [
+          [
+            30,
+            60,
+            90
+          ],
+          6
+        ]
+      }
+    ]
+  },
+  "photoshop": "Select > Subject, Add Layer Mask, Layer > New Fill Layer > Solid Color, drag it below the subject",
+  "notes": "A plain swap looks pasted. Add a soft contact shadow under the subject on its own layer (Multiply, low opacity)."
+}

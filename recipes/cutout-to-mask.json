@@ -1,0 +1,67 @@
+{
+  "name": "cutout-to-mask",
+  "summary": "Separate the subject from its background with a layer mask (nothing is deleted).",
+  "when": "Product or subject on a fairly plain background that needs a transparent or new background.",
+  "steps": [
+    {
+      "id": "layer.new.layerFromBackground",
+      "params": {}
+    },
+    {
+      "id": "select.subject",
+      "params": {}
+    },
+    {
+      "id": "select.refineEdge",
+      "params": {
+        "radius": 2,
+        "smooth": 2,
+        "output": "selection"
+      }
+    },
+    {
+      "id": "layer.layerMask.revealSelection",
+      "params": {}
+    },
+    {
+      "id": "select.deselect",
+      "params": {}
+    }
+  ],
+  "test": {
+    "in": "subject.png",
+    "out_ext": ".png"
+  },
+  "expect": {
+    "has_mask": true,
+    "regions": [
+      {
+        "region": [
+          5,
+          5,
+          40,
+          40
+        ],
+        "alpha_max": 10
+      },
+      {
+        "region": [
+          280,
+          190,
+          40,
+          40
+        ],
+        "mean_rgb_near": [
+          [
+            215,
+            112,
+            38
+          ],
+          30
+        ]
+      }
+    ]
+  },
+  "photoshop": "Select > Subject, Select and Mask (refine edge), then Layer > Layer Mask > Reveal Selection",
+  "notes": "PhotoCraft's Select Subject is classical (graph cut), not ML: it works on clear contrast, struggles on busy backgrounds. Check the mask over black and over white."
+}

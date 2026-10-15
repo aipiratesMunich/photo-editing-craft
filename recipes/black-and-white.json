@@ -1,0 +1,49 @@
+{
+  "name": "black-and-white",
+  "summary": "Convert to black and white with control over how each color maps to gray.",
+  "when": "Monochrome looks, or to judge composition and tone without color.",
+  "vars": {
+    "reds": 40,
+    "blues": 0
+  },
+  "steps": [
+    {
+      "id": "layer.newAdjustmentLayer.blackWhite",
+      "params": {
+        "reds": "${reds}",
+        "yellows": 60,
+        "greens": 40,
+        "cyans": 60,
+        "blues": "${blues}",
+        "magentas": 80
+      },
+      "as": "bw"
+    },
+    {
+      "id": "layer.setProps",
+      "params": {
+        "layer": "$bw",
+        "name": "Black & White"
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png"
+  },
+  "expect": {
+    "layers_min": 2,
+    "regions": [
+      {
+        "region": [
+          300,
+          100,
+          100,
+          100
+        ],
+        "max_channel_spread": 1
+      }
+    ]
+  },
+  "photoshop": "Layer > New Adjustment Layer > Black & White",
+  "notes": "Darker blues give a dramatic sky; brighter reds and yellows lift skin. Add a Curves layer above for contrast."
+}

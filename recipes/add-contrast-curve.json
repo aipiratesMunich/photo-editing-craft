@@ -1,0 +1,55 @@
+{
+  "name": "add-contrast-curve",
+  "summary": "Add mid-tone contrast with a gentle S-curve on an adjustment layer.",
+  "when": "The image looks flat or hazy: histogram bunched in the middle, no real blacks or whites.",
+  "vars": {
+    "curve": [
+      [
+        0,
+        0
+      ],
+      [
+        64,
+        28
+      ],
+      [
+        128,
+        128
+      ],
+      [
+        192,
+        228
+      ],
+      [
+        255,
+        255
+      ]
+    ]
+  },
+  "steps": [
+    {
+      "id": "layer.newAdjustmentLayer.curves",
+      "params": {
+        "points": "${curve}"
+      },
+      "as": "contrast"
+    },
+    {
+      "id": "layer.setProps",
+      "params": {
+        "layer": "$contrast",
+        "name": "Contrast S-curve"
+      }
+    }
+  ],
+  "test": {
+    "in": "flat.png"
+  },
+  "expect": {
+    "layers_min": 2,
+    "luma_std_min": 26,
+    "clipped_max": 1
+  },
+  "photoshop": "Layer > New Adjustment Layer > Curves, drag the shadow quarter down and the highlight quarter up",
+  "notes": "Very hazy images first need black and white points set (Levels or the Curves endpoints) to where the histogram actually starts and ends. Strong curves also raise saturation; set the layer to Luminosity blend if colors get loud."
+}

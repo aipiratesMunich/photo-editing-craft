@@ -1,0 +1,90 @@
+{
+  "name": "image-inside-text",
+  "summary": "Show the photo only inside big letters (clipping mask).",
+  "when": "Title treatments, covers, social graphics.",
+  "vars": {
+    "text": "WILD",
+    "size": 220
+  },
+  "steps": [
+    {
+      "id": "layer.new.layerFromBackground",
+      "params": {},
+      "as": "photo"
+    },
+    {
+      "id": "layer.setProps",
+      "params": {
+        "layer": "$photo",
+        "name": "Photo"
+      }
+    },
+    {
+      "id": "type.create",
+      "params": {
+        "x": "=width*0.5",
+        "y": "=height*0.7",
+        "text": "${text}",
+        "size": "${size}",
+        "color": "#000000",
+        "align": "center",
+        "name": "Letters"
+      },
+      "as": "letters"
+    },
+    {
+      "id": "layer.arrange.sendToBack",
+      "params": {
+        "layer": "$letters"
+      }
+    },
+    {
+      "id": "layer.createClippingMask",
+      "params": {
+        "layer": "$photo"
+      }
+    },
+    {
+      "id": "layer.newFillLayer.solidColor",
+      "params": {
+        "color": "#ffffff"
+      },
+      "as": "paper"
+    },
+    {
+      "id": "layer.arrange.sendToBack",
+      "params": {
+        "layer": "$paper"
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png"
+  },
+  "expect": {
+    "layer_kinds": [
+      "Type"
+    ],
+    "layers_min": 3,
+    "regions": [
+      {
+        "region": [
+          5,
+          5,
+          30,
+          30
+        ],
+        "mean_rgb_near": [
+          [
+            255,
+            255,
+            255
+          ],
+          3
+        ]
+      }
+    ]
+  },
+  "photoshop": "Put the photo layer directly above a type layer, then Layer > Create Clipping Mask (Alt/Option-click between the layers)",
+  "notes": "Use a heavy, wide font; thin strokes show too little picture."
+}

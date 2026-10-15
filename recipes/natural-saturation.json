@@ -1,0 +1,35 @@
+{
+  "name": "natural-saturation",
+  "summary": "Boost color with Vibrance, which protects already saturated colors and skin.",
+  "when": "Colors look dull after tone correction, or a muted scene needs more life without neon skin.",
+  "vars": {
+    "vibrance": 30,
+    "saturation": 5
+  },
+  "steps": [
+    {
+      "id": "layer.newAdjustmentLayer.vibrance",
+      "params": {
+        "vibrance": "${vibrance}",
+        "saturation": "${saturation}"
+      },
+      "as": "vib"
+    },
+    {
+      "id": "layer.setProps",
+      "params": {
+        "layer": "$vib",
+        "name": "Vibrance"
+      }
+    }
+  ],
+  "test": {
+    "in": "scene.png"
+  },
+  "expect": {
+    "layers_min": 2,
+    "mean_chroma_min": 64
+  },
+  "photoshop": "Layer > New Adjustment Layer > Vibrance",
+  "notes": "Do tone first. Keep Saturation low (0 to +10); Vibrance carries the boost."
+}
