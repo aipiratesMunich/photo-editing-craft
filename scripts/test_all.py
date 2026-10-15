@@ -26,7 +26,7 @@ def test(name):
     run = [sys.executable, str(ROOT / "scripts/run_recipe.py"), str(recipe_path),
            "--in", str(ROOT / "tests/fixtures" / t["in"]),
            "--out", str(OUT / (name + t.get("out_ext", ".png"))),
-           "--master", str(master), "--report", str(OUT / f"{name}.report.json")]
+           "--master", str(master), "--force", "--report", str(OUT / f"{name}.report.json")]
     for k, v in t.get("vars", {}).items():
         run += ["--var", f"{k}={json.dumps(v)}"]
     p = subprocess.run(run, capture_output=True, text=True)

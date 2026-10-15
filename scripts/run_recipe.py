@@ -153,8 +153,16 @@ def main():
     ap.add_argument("--var", action="append", default=[], help="name=value (JSON or text)")
     ap.add_argument("--preview", help="PNG preview to look at (max side 1024)")
     ap.add_argument("--report", help="write the JSON report here instead of stdout")
+    ap.add_argument("--force", action="store_true", help="replace --out if it already exists")
     ap.add_argument("--cli", help="path to photocraft-cli")
     a = ap.parse_args()
+    if a.input:
+        src_path = Path(a.input).resolve()
+        for target in (a.out, a.master):
+            if target and Path(target).resolve() == src_path:
+                sys.exit("error: output would overwrite the input; write to a new file")
+    if Path(a.out).exists() and not a.force:
+        sys.exit(f"error: {a.out} exists; pass --force to replace it")
 
     recipe = json.loads(Path(a.recipe).read_text())
     resolver = Resolver(parse_vars(recipe, a.var))
@@ -175,7 +183,7 @@ def main():
                     s.call("doc.save", {"path": str(Path(a.master).resolve())})
                 out = Path(a.out).resolve()
                 if out.exists():
-                    out.unlink()  # PhotoCraft refuses to replace files; reruns should not fail
+                    out.unlink()  # --force given; PhotoCraft itself never replaces an export
                 s.call("doc.save", {"path": str(out)})
                 if a.preview:
                     s.call("doc.render", {"path": str(Path(a.preview).resolve()), "maxSide": 1024})
