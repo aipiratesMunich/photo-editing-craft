@@ -26,7 +26,7 @@ import sys
 import time
 from pathlib import Path
 
-from pclib import PhotoCraftError, Session, background_layer, common_root
+from pclib import PhotoCraftError, Session, background_layer, common_root, walk_layers
 
 HINTS = {
     "filters need a pixel layer": 'add "target": "$background" (or another pixel layer) to the step',
@@ -101,6 +101,11 @@ def parse_vars(recipe, overrides):
     return variables
 
 
+def has_background(doc):
+    return any(l.get("name") == "Background" and l.get("kind") == "Pixel"
+               for _, l in walk_layers(doc["layers"]))
+
+
 def hint_for(message):
     return next((h for k, h in HINTS.items() if k in message), None)
 
@@ -127,7 +132,11 @@ def run(recipe, session, resolver, report):
                 session.run("layer.select", {"layer": resolver.value(step["target"])})
             params = resolver.value(step.get("params", {}))
             entry["params"] = params
-            result = session.run(step["id"], params)
+            if step["id"] == "layer.new.layerFromBackground" and not has_background(resolver.doc):
+                # documents from other apps (many PSDs) have no locked Background: nothing to unlock
+                result = {"layer": resolver.layers["background"], "skipped": "no Background layer"}
+            else:
+                result = session.run(step["id"], params)
         except (PhotoCraftError, KeyError, ValueError) as e:
             entry.update(error=str(e), hint=hint_for(str(e)))
             report["steps"].append(entry)
