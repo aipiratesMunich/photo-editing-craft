@@ -126,7 +126,7 @@ look at the preview and report the numbers.
 
 New recipes are the most useful contribution: a JSON recipe, a fixture (generate it in
 `scripts/make_fixtures.py`), an `expect` block, and proof that the expectation fails on the
-untouched fixture. Run `scripts/test_all.py` before opening a pull request.
+untouched fixture. Details in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
