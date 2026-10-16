@@ -9,10 +9,12 @@ retoucher would, then measures the result before it says "done".
 and layered PSD files.** Color correction, retouching, cutouts and masks, compositing, type on
 images, web and social export, CMYK print prep.
 
-| | |
-|---|---|
-| ![Color cast removed](docs/media/color-cast.gif) | ![Background replaced](docs/media/background.gif) |
-| ![Dust spots healed](docs/media/spots.gif) | ![Contrast curve](docs/media/contrast.gif) |
+<p align="center">
+  <img src="docs/media/color-cast.gif" alt="fix-color-cast: warm cast removed" width="49%">
+  <img src="docs/media/background.gif" alt="replace-background: cutout on a new backdrop" width="49%">
+  <img src="docs/media/spots.gif" alt="remove-spots: dust spots healed" width="49%">
+  <img src="docs/media/contrast.gif" alt="add-contrast-curve: flat image gains contrast" width="49%">
+</p>
 
 Every GIF is a real recipe run from this repo on its test image, recorded by
 `scripts/make_demo_media.py`.
